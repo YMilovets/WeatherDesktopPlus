@@ -1,0 +1,23 @@
+{
+  "name": "weatherdesktopplus",
+  "version": "0.9.0-pre-alpha",
+  "description": "Данная программа позволяет просматривать погоду в интернете",
+  "main": "index.js",
+  "scripts": {
+    "start": "electron .",
+    "package-win32": "electron-packager . weather-desktop-plus --overwrite --asar=true --platform=win32 --arch=ia32 --icon=assets/icon/win/favicon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"weather++\"",
+    "package-win64": "electron-packager . weather-desktop-plus --overwrite --asar=true --platform=win32 --arch=x64 --icon=assets/icon/win/favicon.ico --prune=true --out=release-builds --version-string.CompanyName=CE --version-string.FileDescription=CE --version-string.ProductName=\"weather++\"",
+    "package-linux": "electron-packager . weather-desktop-plus --overwrite --asar=true --platform=linux --arch=x64 --icon=assets/icon/png/256.png --prune=true --out=release-builds"
+  },
+  "keywords": [],
+  "author": "theNB",
+  "license": "ISC",
+  "dependencies": {
+    "electron-packager": "^15.0.0",
+    "socket.io": "^4.0.1",
+    "socket.io-client": "^4.0.1"
+  },
+  "devDependencies": {
+    "electron": "^9.4.4"
+  }
+}

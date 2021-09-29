@@ -1,0 +1,42 @@
+body {
+    margin: 0;
+}
+.main_tabs > input {
+    display: none;
+}
+.main_tabs > input:checked + label {
+    color: #2d3561;
+    background: #FFFFFF;
+}
+.main_tabs > label {
+    display: inline-block;
+    padding: 10px;
+    margin: 5px -3px -1px 0;
+    text-align: center;
+    color: #424242;
+    background: rgba(229, 230, 236, 0.55);
+    cursor: pointer;
+    font: 14px/14px Roboto;
+}
+#tab_1:checked ~ .main-form, #tab_2:checked ~ .openweather {
+    display: block;
+}
+.main_tabs > div {
+    display: none;
+}
+.main-form, .openweather {
+    margin: 10px;
+}
+.main-form p, .btn_group {
+    margin: 0 0 10px;
+}
+.main_tabs > div.wrap_style {
+    width: 100%;
+    height: 39px;
+    background: #4589D4;
+    position: absolute;
+    top: 0;
+    left: 0;
+    display: block;
+    z-index: -1;
+}

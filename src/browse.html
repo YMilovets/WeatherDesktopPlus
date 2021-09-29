@@ -1,0 +1,31 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Подробный обзор прогноза погоды</title>
+    <link href="https://fonts.googleapis.com/css2?family=Oswald&display=swap" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="browse.css">
+</head>
+<body>
+<div class="wrapper">
+    <div class="main-params">
+        <div class="temp"><span>0 K</span></div>
+        <div class="location"><span>нет данных</span></div>
+    </div>
+
+    <div class="params">
+        <ul>
+            <li>Состояние: <span>нет данных</span></li>
+            <li>Скорость ветра: <span>нет данных</span></li>
+            <li>Давление: <span>нет данных</span></li>
+            <li>Ощущается как: <span>нет данных</span></li>
+        </ul>
+    </div>
+</div>
+<div class="time-message">Обновлено: неизвестно</div>
+<div class="footer">Данные предоставлены сервисом <a class="link_api" href="https://openweathermap.org/">OpenWeather</a></div>
+<script src="../node_modules/socket.io/client-dist/socket.io.js"></script>
+<script src="browse.js"></script>
+</body>
+</html>

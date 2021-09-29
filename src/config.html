@@ -1,0 +1,41 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Настройки программы</title>
+    <link rel="stylesheet" href="index.css">
+</head>
+<body>
+    <div class="main_tabs">
+        <div class="wrap_style"></div>
+        <input type="radio" name="inset" value="" id="tab_1" checked>
+        <label for="tab_1">Основные</label>
+
+        <input type="radio" name="inset" value="" id="tab_2">
+        <label for="tab_2">OpenWeather</label>
+
+        <div class="main-form">
+            <p class="message"></p>
+            <form action="">
+                <p>
+                    <label>Поиск города:<br>
+                        <input id="city" type="text" name=""></label>
+                </p>
+                <p>
+                    <label>Время обновления (в минутах):<br>
+                        <input type="number" name="time" value="2" min="2" max="60" ></label>
+                </p>
+                <div class="btn_group">
+                    <input id="btn_confirm" type="button" value="OK" name="confirm">
+                    <input id="btn_cancel" type="button" value="Отмена" name="cancel">
+                </div>
+            </form>
+        </div>
+        <div class="openweather">
+            <p>Reconstruction</p>
+        </div>
+    </div>
+    <script src="../node_modules/socket.io/client-dist/socket.io.js"></script>
+    <script src="manage.js"></script>
+</body>
+</html>

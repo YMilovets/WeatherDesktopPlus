@@ -141,8 +141,8 @@ function main() {
         tray.setImage(__dirname + '/assets/tray/01d.png');
     }
     function getTrayAccepted(src) {
-        tray.setToolTip(src.name + " " + Math.round(src.main.temp - config.getTemperature()) + "°C");
-        tray.setImage(__dirname + '/assets/tray/' + src.weather[0].icon + '.png');
+        tray.setToolTip(src.city + " " + Math.round(src.temperature) + "°C");
+        tray.setImage(__dirname + '/assets/tray/' + src.icon + '.png');
     }
 
 }

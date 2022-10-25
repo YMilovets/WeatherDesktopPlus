@@ -1,14 +1,14 @@
-const https = require("https");
 const server = require("http").createServer();  //Инициализация работы сервера http
 const io = require("socket.io")(server);        //Подключение сокетов к серверу
 const fs = require("fs");                       //Подключение файлового модуля
+const setParamsOfWeatherFromAPI = require('./src/tasks/setParamsOfWeatherFromAPI');
 //Инициализация класса с настройками параметров программы по умолчанию
 const Config = require('./data');
 const config = new Config();
 
 let city_param, //параметр. хранящий текущий город при работе сервера
     time_param, //параметр. хранящий время обновления при работе сервера
-    sourceURL,  //формирование адреса для текущего запроса
+    service_param,
     timerStamp, //id таймера
     query; 
 try {
@@ -28,19 +28,18 @@ let settings = JSON.parse(query);
 //настройки, извлеченные с файла config.json, записываются в соотвествующие переменные сервера
 city_param = settings.city;
 time_param = settings.time;
-//Формирование URL запроса
-sourceURL = config.getOWURL(city_param, config.getAPIKey(), config.getLanguage());
+service_param = settings.service;
 
 server.listen(3001); //Порт прослушки сервера
 //Запрос на получение JSON по URL
-getHttpsJSON(sourceURL);
+setParamsOfWeatherFromAPI(city_param, io.emit.bind(io), service_param);
 
 io.sockets.on("connection", socket => {
     //Событие отправки параметров погоды будет отослано после получения данных со стороннего JSON
-    getHttpsJSON(sourceURL); //Запрос на получение JSON по URL
+    setParamsOfWeatherFromAPI(city_param, io.emit.bind(io), service_param); //Запрос на получение JSON по URL
     clearInterval(timerStamp);
     timerStamp = setInterval(() => {
-        getHttpsJSON(sourceURL); //Запрос на получение JSON по URL
+        setParamsOfWeatherFromAPI(city_param, io.emit.bind(io), service_param); //Запрос на получение JSON по URL
     }, 1000 * config.getTime() * time_param);
     //Обработчик события "Отмена настроек"
     socket.on("cancel_settings", () => {
@@ -48,13 +47,17 @@ io.sockets.on("connection", socket => {
     });
     //Обработчик события "Изменить настройки"
     socket.on("change_settings", () => {
-        io.emit("get_data_config", city_param, time_param);
+        io.emit("get_data_config", city_param, time_param, service_param);
+    });
+
+    socket.on("check_exists_city", (city) => {
     });
     //Обработчик события "Подтверждение настроек"
-    socket.on("confirm_settings", (city_value, time_value) => {
+    socket.on("confirm_settings", (city_value, time_value, services_value) => {        
         const conf = {
             city: city_value,
-            time: time_value
+            time: time_value,
+            service: services_value || service_param,
         }
         //Записать все изменения в факл конфигурации
         fs.writeFile("config.json", JSON.stringify(conf), err => {
@@ -63,36 +66,15 @@ io.sockets.on("connection", socket => {
         //Загрузить параметры из файла конфигурации на сервер 
         city_param = city_value;
         time_param = time_value;
-        sourceURL = config.getOWURL(city_param, config.getAPIKey(), config.getLanguage()); //Формирование URL запроса
+        service_param = services_value || service_param;
         //Активатор события "Успешное подтверждение"
         io.emit("success");
         //Сбросить таймер времени обновления запроса и перезапустить в дальнейшем
         clearInterval(timerStamp);
         //Запрос на получение JSON по URL
-        getHttpsJSON(sourceURL);
+        setParamsOfWeatherFromAPI(city_param, io.emit.bind(io), service_param);
         timerStamp = setInterval(() => {
-            getHttpsJSON(sourceURL); //Запрос на получение JSON по URL
+            setParamsOfWeatherFromAPI(city_param, io.emit.bind(io), service_param);; //Запрос на получение JSON по URL
         }, 1000 * config.getTime() * time_param);
     })
 });
-//Функция получения JSON по URL
-function getHttpsJSON(url) {
-    https.get(url, result => {
-        try {
-            let body = "";
-            result.on("data", chunk => {
-                body += chunk;
-            })
-            result.on("end", () => {
-                //данные JSON, полученные в результате запроса к стороннему ресурсу
-                let data = JSON.parse(body);
-               //Активатор события "Отправить параметры погоды"
-                io.emit("send-weather-params", data)
-            })
-        } catch (err) {
-            
-        }
-    }).on("error", err => {
-        //Исключение в результате неудачного обращения к внешнему ресурсу
-    });
-}

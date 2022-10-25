@@ -1,6 +1,6 @@
 {
   "name": "weatherdesktopplus",
-  "version": "0.9.0-pre-alpha",
+  "version": "0.9.1-alpha",
   "description": "Данная программа позволяет просматривать погоду в интернете",
   "main": "index.js",
   "scripts": {

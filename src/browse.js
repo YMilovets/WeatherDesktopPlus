@@ -7,6 +7,7 @@ const shell = require('electron').shell;
 let timeReset = 0, //время обновления запроса
     timeStamp;     //id таймера
 let timeMessage = document.querySelector(".time-message");
+let serviceLink = document.querySelector(".link_api");
 //Подключение клиента к сокету
 let socket = io.connect('ws://localhost:3001');
 resetInfo();
@@ -25,13 +26,16 @@ function resetInfo () {
             let tempUnit = document.querySelector(".temp > span");
             let cityUnit = document.querySelector(".location > span");
             //Работаем со свойствами объекта source
-            document.body.style.backgroundImage = "url('../assets/fullscreen/" + source.weather[0].icon + ".jpg')";
-            tempUnit.textContent = Math.round(source.main.temp - config.getTemperature()) + "°C";
-            cityUnit.textContent = source.name;
-            params[0].textContent = source.weather[0].description;
-            params[1].textContent = source.wind.speed + " м/с";
-            params[2].textContent = Math.round(source.main.pressure * config.mmhg) + " мм рт. ст.";
-            params[3].textContent = Math.round(source.main.feels_like - config.getTemperature()) + "°C";
+            document.body.style.backgroundImage = "url('../assets/fullscreen/" + source.icon + ".jpg')";
+            tempUnit.textContent = Math.round(source.temperature) + "°C";
+            cityUnit.textContent = source.city;
+            params[0].textContent = source.description;
+            params[1].textContent = source.windSpeed + " м/с";
+            params[2].textContent = source.pressure !== null ? Math.round(source.pressure * config.mmhg) + " мм рт. ст." : "нет данных";
+            params[3].textContent = Math.round(source.feelLikeTemp) + "°C";
+            const { name, link } = config.services.find(({ type }) => type === source.service);
+            serviceLink.textContent = name;
+            serviceLink.href = link;
             //Сбросить таймер обновления запроса
             clearInterval(timeStamp);
             getTimeReset();

@@ -12,7 +12,7 @@
         <label for="tab_1">Основные</label>
 
         <input type="radio" name="inset" value="" id="tab_2">
-        <label for="tab_2">OpenWeather</label>
+        <label for="tab_2">Сервисы</label>
 
         <div class="main-form">
             <p class="message"></p>
@@ -31,8 +31,11 @@
                 </div>
             </form>
         </div>
-        <div class="openweather">
-            <p>Reconstruction</p>
+        <div class="services-form">
+            <div class="services-data"></div>
+            <div class="btn_group">
+                <input id="btn_service_confirm" type="button" value="Изменить" name="change">
+            </div>
         </div>
     </div>
     <script src="../node_modules/socket.io/client-dist/socket.io.js"></script>

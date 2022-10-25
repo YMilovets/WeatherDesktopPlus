@@ -18,13 +18,13 @@ body {
     cursor: pointer;
     font: 14px/14px Roboto;
 }
-#tab_1:checked ~ .main-form, #tab_2:checked ~ .openweather {
+#tab_1:checked ~ .main-form, #tab_2:checked ~ .services-form {
     display: block;
 }
 .main_tabs > div {
     display: none;
 }
-.main-form, .openweather {
+.main-form, .services-form {
     margin: 10px;
 }
 .main-form p, .btn_group {

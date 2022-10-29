@@ -9,7 +9,7 @@ const MenuTrayItem = require('./MenuItems');
 const config = new Config();
 const { fork } = require("child_process"); //запуск подпроцессов программы
 //после запуска программы инициируем работу сервера
-let serverProcess = fork(__dirname + "/server.js", [
+let serverProcess = fork(path.join(__dirname, "server.js"), [
     "--subprocess",
     app.getVersion()
 ])
@@ -105,7 +105,7 @@ function main() {
     ]);
 
     setTimeout(() => tray.setContextMenu(contextMenu), 1000);
-    socket.on("send-weather-params", data => {
+    socket.on("send-weather-params", data => {       
         if (isEmpty(data)) getTrayCanceled();
         else {
             if (data.cod && +data.cod === 401) {
@@ -128,7 +128,12 @@ function main() {
             }
             getTrayAccepted(data);
         }
-        
+    })
+    socket.on('send-error', (title, data) => {
+        tray.displayBalloon({
+            title,
+            content: data
+        })
     })
     //Прием ассинхронных событий подтверждения настроек от формы config.html
     socket.on("success", () => {

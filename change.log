@@ -1,3 +1,10 @@
+Weather Desktop Plus v.0.9.1-alpha enhancements and bug-fixes:
+- Disabled to support an asar file container because the import of packages didn't work by relative paths
+- Add other interfaces for query HTTP and HTTPS clients to the weather APIs and mock data for other service
+- Create task and adapters to set request data of weather parameters from APIs
+- Change style of settings window and add a new tab of the service selector
+- Change a relative path to absolute to connect modules and adapters and fork the process of the socket server file
+
 Weather Desktop Plus v.0.9.0-pre-alpha enhancements and bug-fixes:
 - Realeased client - server architecture
 - Timer loop iteration launched on the server

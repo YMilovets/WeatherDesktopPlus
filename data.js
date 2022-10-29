@@ -10,18 +10,24 @@ class Data {
                 type: "openWeather",
                 key: "cd69efeac9ebe9ddb2d6b8c2e030da24",
                 link: "https://openweathermap.org/",
+                apiRequest: (city, token, lang, key) => 
+                    `http://api.openweathermap.org/data/2.5/weather?q=${encodeURI(city)}&appid=${token}&lang=${lang}`
             },
             {
                 name: "OpenWeatherMap (with HTTPS)",
                 type: "openWeatherHttps",
                 key: "cd69efeac9ebe9ddb2d6b8c2e030da24",
                 link: "https://openweathermap.org/",
+                apiRequest: (city, token, lang, key) => 
+                    `https://api.openweathermap.org/data/2.5/weather?q=${encodeURI(city)}&appid=${token}&lang=${lang}`
             },
             {
                 name: "AccuWeather",
                 type: "accuWeather",
-                key: "kBDiRGPDX0sAPAVtNncEfVNepyE6w2Yj",
+                key: "Hudd4BaOmv5mKR44pNrvpAYJSNi5xIKD",
                 link: "https://www.accuweather.com/",
+                apiRequest: (city, token, lang, key) => 
+                    `http://dataservice.accuweather.com/forecasts/v1/hourly/1hour/${key}?apikey=${token}&language=${lang}&details=true` 
             },
         ],
         this.default = {
@@ -47,27 +53,12 @@ class Data {
         return this.lang;
     }
     getOWURL(city, token, lang, service = "openWeather") {
-        switch (service) {          
-            case "openWeather":
-                return `http://api.openweathermap.org/data/2.5/weather?q=${encodeURI(city)}&appid=${token}&lang=${lang}`;
-            case "openWeatherHttps":
-                return `https://api.openweathermap.org/data/2.5/weather?q=${encodeURI(city)}&appid=${token}&lang=${lang}`;
-            case "accuWeather":
-                return `http://dataservice.accuweather.com/locations/v1/cities/search?apikey=${token}&q=${city}` 
-            default:
-                return `http://api.openweathermap.org/data/2.5/weather?q=${encodeURI(city)}&appid=${token}&lang=${lang}`;
-        }
+        return this.services.find(({ type }) => type === service).apiRequest(city, token, lang)
     }
     getAWURL({ city, token, key, service, lang }) {
-        switch (service) {          
-            case "getIDAccuWeather":
-                return `http://dataservice.accuweather.com/locations/v1/cities/search?apikey=${token}&q=${city}`;
-            case "accuWeather":
-                return `http://dataservice.accuweather.com/forecasts/v1/hourly/1hour/${key}?apikey=${token}&language=${lang}&details=true` 
-            default:
-                return `http://dataservice.accuweather.com/forecasts/v1/hourly/1hour/${key}?apikey=${token}`;
-        }
-
+        if (service === "getIDAccuWeather")
+            return `http://dataservice.accuweather.com/locations/v1/cities/search?apikey=${token}&q=${city}`;
+        return this.services.find(({ type }) => type === service).apiRequest(city, token, lang, key)
     }
 }
 module.exports = Data;

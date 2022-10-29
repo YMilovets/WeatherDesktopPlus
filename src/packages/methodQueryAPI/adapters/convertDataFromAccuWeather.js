@@ -1,4 +1,6 @@
-const Config = require("../../../../data");
+const { rootPath } = require('electron-root-path');
+const path = require('path');
+const Config = require(path.join(rootPath, "data"));
 function convertAccuWeatherIcon(iconID) {
   const thumbs = {
     1: "01d",

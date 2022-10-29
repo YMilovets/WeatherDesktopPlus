@@ -1,19 +1,21 @@
+const { rootPath } = require('electron-root-path');
+const path = require('path');
 const {
   convertDataFromAccuWeather,
   convertDataFromOpenWeather
-} = require("../packages/methodQueryAPI/adapters");
+} = require(path.join(rootPath, "src/packages/methodQueryAPI/adapters"));
 const {
   httpNPMQuery,
   httpsNPMQuery,
   mockQuery
-} = require("../packages/methodQueryAPI");
+} = require(path.join(rootPath, "src/packages/methodQueryAPI"));
 
 async function setParamsOfWeatherFromAPI(
   city,
   sendParams,
   serviceType = "openWeather"
 ) {
-  const Config = require("../../data");
+  const Config = require(path.join(rootPath, "data"));
 
   const config = new Config();
   const sourceOpenWeatherURL = config.getOWURL(
@@ -49,10 +51,17 @@ async function setParamsOfWeatherFromAPI(
     case "accuWeather":
       const requestData = await httpNPMQuery(
         sourceExistsAccuWeatherURL
-      ); 
+      ).catch(() => sendParams("send-error", "Город не найден")); 
+        
+      if (requestData.Code === "Unauthorized")
+        sendParams("send-error", "AccuWeather", "Ключ аутентификации API заблокирован");
+      if (requestData.Code === "ServiceUnavailable")
+        sendParams("send-error", "AccuWeather", "Разрешенное количество запросов API закончилось");
+    
       if (requestData.length > 0) {
         const [{ Key: locationKey, LocalizedName: city }] = requestData;    
-        resultData = await httpNPMQuery(sourceAccuWeatherURL(locationKey));
+        resultData = await httpNPMQuery(sourceAccuWeatherURL(locationKey))
+          .catch(() => sendParams("send-error", "Ошибка при подключении к AccuWeather"));      
         sendParams("send-weather-params", convertDataFromAccuWeather(resultData, city, serviceType));
       }
       break;

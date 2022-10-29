@@ -1,9 +1,11 @@
 const server = require("http").createServer();  //Инициализация работы сервера http
 const io = require("socket.io")(server);        //Подключение сокетов к серверу
 const fs = require("fs");                       //Подключение файлового модуля
-const setParamsOfWeatherFromAPI = require('./src/tasks/setParamsOfWeatherFromAPI');
+const { rootPath } = require('electron-root-path');
+const path = require('path');
+const setParamsOfWeatherFromAPI = require(path.join(rootPath, 'src/tasks/setParamsOfWeatherFromAPI'));
 //Инициализация класса с настройками параметров программы по умолчанию
-const Config = require('./data');
+const Config = require(path.join(rootPath, "data"));
 const config = new Config();
 
 let city_param, //параметр. хранящий текущий город при работе сервера

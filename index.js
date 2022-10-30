@@ -1,15 +1,14 @@
-const {app, dialog, Menu, Tray} = require('electron');
+const {app, dialog, Menu, Tray, shell} = require('electron');
 const path = require('path');
 const Window = require('./Window');
 const Config = require('./data');
 //Возможность подключения клиента к серверу сокетов
 const io = require("socket.io-client");
-const MenuTrayItem = require('./MenuItems');
-//app.setPath("userData", path.join(__dirname, "data"));
 const config = new Config();
 const { fork } = require("child_process"); //запуск подпроцессов программы
+const os = require('os');
 //после запуска программы инициируем работу сервера
-let serverProcess = fork(path.join(__dirname, "server.js"), [
+const serverProcess = fork(path.join(__dirname, "server.js"), [
     "--subprocess",
     app.getVersion()
 ])
@@ -25,10 +24,13 @@ function isEmpty(obj) {
 
 let setting = null, //окно настроек
     about = null, //информационное окно "О программе"
-    browse = null; //окно "Подробной обзор прогноза погоды"
+    browse = null, //окно "Подробной обзор прогноза погоды"
+    wait = null,   //окно "Пожалуйста, подождите..."
+    typeOS = os.type(), //определяем тип операционной системы
+    blockProcessTimer = null; //таймер блокировки обновления данных о погоде
 
 function main() {
-    const socket = io.connect("ws://localhost:3001")
+    const socket = io.connect("ws://localhost:8080")
     let tray = new Tray(__dirname + '/assets/tray/03d.png');
 
     browse = new Window({
@@ -37,7 +39,7 @@ function main() {
         height: 250,
         autoHideMenuBar: true,
         //resizable: false,
-        icon: __dirname + '/assets/icon/window.ico'
+        icon: path.join(__dirname, '/assets/icon', config.getIcon(typeOS))
     });
     browse.hide();
     browse.setMenu(null); //Отключить отображение меню после нажатия клавиши Alt
@@ -70,7 +72,7 @@ function main() {
                         height: 285,
                         autoHideMenuBar: true,
                         resizable: false,
-                        icon: __dirname + '/assets/icon/window.ico'
+                        icon: path.join(__dirname, '/assets/icon', config.getIcon(typeOS)),
                     });
                     setting.on('closed', () => setting = null);
                     setting.setMenu(null);
@@ -92,6 +94,32 @@ function main() {
                     e.defaultPrevented = true;
                     browse.hide();
                 })
+            }
+        },
+        { label: "Сообщить об ошибке", click()
+            {
+                shell.openExternal(config.email);
+            }
+        },
+        { label: "Обновить данные по погоде", click()
+            {
+                if (!wait && !blockProcessTimer) {
+                    wait = new Window({
+                        file: path.join('src', 'wait.html'),
+                        width: 320,
+                        height: 150,
+                        autoHideMenuBar: true,
+                        //resizable: false,
+                        icon: path.join(__dirname, '/assets/icon', config.getIcon(typeOS)),
+                    });
+                    wait.on('closed', () => wait = null);
+                    wait.setMenu(null);
+                    wait.show();
+                }
+                blockProcessTimer = setTimeout(() => {
+                    if (wait) wait.close();
+                    blockProcessTimer = null;
+                }, config.delay)
             }
         },
         { label: "Закрыть", click()

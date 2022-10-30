@@ -51,7 +51,14 @@ io.sockets.on("connection", socket => {
     socket.on("change_settings", () => {
         io.emit("get_data_config", city_param, time_param, service_param);
     });
-    
+    //Обработчик события "Подключение к сервису погоды"
+    socket.on("update_connection", () => {
+        setParamsOfWeatherFromAPI(city_param, io.emit.bind(io), service_param); //Запрос на получение JSON по URL
+        clearInterval(timerStamp);
+        timerStamp = setInterval(() => {
+            setParamsOfWeatherFromAPI(city_param, io.emit.bind(io), service_param); //Запрос на получение JSON по URL
+        }, 1000 * config.getTime() * time_param);
+    })
     socket.on("check_exists_city", (city) => {
     });
     //Обработчик события "Подтверждение настроек"

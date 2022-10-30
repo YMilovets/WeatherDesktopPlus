@@ -1,4 +1,10 @@
 # Changelog WeatherDesktopPlus
+Weather Desktop Plus v.0.9.2-alpha enhancements and bug-fixes:
+- Added to the context menu sending feedback about the state program reviews and updating weather data
+- Fixed a port of connnection to the socket server and method names of requests
+- Added a new window for waiting for the launch updating requests
+- Added an operating system check to display program icons
+
 Weather Desktop Plus v.0.9.1-alpha enhancements and bug-fixes:
 - Disabled to support an asar file container because the import of packages didn't work by relative paths
 - Add other interfaces for query HTTP and HTTPS clients to the weather APIs and mock data for other service

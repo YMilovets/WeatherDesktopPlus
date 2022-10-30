@@ -4,6 +4,18 @@ class Data {
         this.K = 273.15;
         this.lang = "ru";
         this.mmhg = 0.75006156130264;
+        this.delay = 3000;
+        this.email = "mailto:thenukerbombs@gmail.com?subject=BugFix: сообщение об ошибке";
+        this.icon = [
+            {
+                type: "Linux",
+                path: "linux/256.png",
+            },
+            {
+                type: "other",
+                path: "window.ico",
+            }
+        ];
         this.services = [
             {
                 name: "OpenWeatherMap",
@@ -29,12 +41,19 @@ class Data {
                 apiRequest: (city, token, lang, key) => 
                     `http://dataservice.accuweather.com/forecasts/v1/hourly/1hour/${key}?apikey=${token}&language=${lang}&details=true` 
             },
-        ],
+        ];
         this.default = {
             city: "Moscow",
             time: 5,
             service: "openWeather"
-        }
+        };
+    }
+    getIcon(typeOS) {
+        const linuxOS = this.icon.find(({ type }) => type === typeOS);
+        const otherOS = this.icon.find(({ type }) => type === "other");
+        if (linuxOS && Object.keys(linuxOS).length > 0)
+            return linuxOS.path;
+        return otherOS.path;
     }
     getTime() {
         return this.secReset;

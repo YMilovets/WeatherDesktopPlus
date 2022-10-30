@@ -3,7 +3,7 @@ const Config = require('../data');
 const config = new Config();
 
 //Подключение клиента к сокету
-let socket = io.connect('ws://localhost:3001');
+let socket = io.connect('ws://localhost:8080');
 
 let cityInput = document.getElementById("city");
 let timeList = document.querySelector("input[name=time]");

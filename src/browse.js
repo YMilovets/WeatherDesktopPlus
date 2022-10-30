@@ -9,7 +9,7 @@ let timeReset = 0, //время обновления запроса
 let timeMessage = document.querySelector(".time-message");
 let serviceLink = document.querySelector(".link_api");
 //Подключение клиента к сокету
-let socket = io.connect('ws://localhost:3001');
+let socket = io.connect('ws://localhost:8080');
 resetInfo();
 //Отображение времени последнего полученного запроса
 function getTimeReset() {

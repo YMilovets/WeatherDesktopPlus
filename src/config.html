@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <title>Настройки программы</title>
     <link rel="stylesheet" href="index.css">
 </head>
+
 <body>
     <div class="main_tabs">
         <div class="wrap_style"></div>
@@ -14,31 +16,43 @@
         <input type="radio" name="inset" value="" id="tab_2">
         <label for="tab_2">Сервисы</label>
 
-        <div class="main-form">
+        <input type="radio" name="inset" value="" id="tab_3">
+        <label for="tab_3">Стили</label>
+
+        <form class="main-form" action="">
             <p class="message"></p>
-            <form action="">
-                <p>
-                    <label>Поиск города:<br>
-                        <input id="city" type="text" name=""></label>
-                </p>
-                <p>
-                    <label>Время обновления (в минутах):<br>
-                        <input type="number" name="time" value="2" min="2" max="60" ></label>
-                </p>
-                <div class="btn_group">
-                    <input id="btn_confirm" type="button" value="OK" name="confirm">
-                    <input id="btn_cancel" type="button" value="Отмена" name="cancel">
-                </div>
-            </form>
-        </div>
-        <div class="services-form">
+            <p>
+                <label>Поиск города:<br>
+                    <input id="city" type="text" name=""></label>
+            </p>
+            <p>
+                <label>Время обновления (в минутах):<br>
+                    <input type="number" name="time" value="2" min="2" max="60"></label>
+            </p>
+            <div class="btn_group">
+                <input id="btn_confirm" type="button" value="OK" name="confirm">
+                <input class="btn-cancel" type="button" value="Отмена" name="cancel">
+            </div>
+        </form>
+        <form class="services-form">
             <div class="services-data"></div>
             <div class="btn_group">
                 <input id="btn_service_confirm" type="button" value="Изменить" name="change">
+                <input class="btn-cancel" type="button" value="Отмена" name="cancel">
             </div>
-        </div>
+        </form>
+
+        <form class="styles-form">
+            <p>Выберите стили ображения иконок в области уведомлений</p>
+            <div class="styles-data"></div>
+            <div class="btn_group">
+                <input id="btn_style_confirm" type="button" value="Изменить" name="change">
+                <input class="btn-cancel" type="button" value="Отмена" name="cancel">
+            </div>
+        </form>
     </div>
     <script src="../node_modules/socket.io/client-dist/socket.io.js"></script>
     <script src="manage.js"></script>
 </body>
+
 </html>

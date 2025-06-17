@@ -1,13 +1,16 @@
 body {
     margin: 0;
 }
+
 .main_tabs > input {
     display: none;
 }
-.main_tabs > input:checked + label {
+
+.main_tabs > input:checked+label {
     color: #2d3561;
     background: #FFFFFF;
 }
+
 .main_tabs > label {
     display: inline-block;
     padding: 10px;
@@ -17,19 +20,30 @@ body {
     background: rgba(229, 230, 236, 0.55);
     cursor: pointer;
     font: 14px/14px Roboto;
+    border-radius: 3px 3px 0 0;
 }
-#tab_1:checked ~ .main-form, #tab_2:checked ~ .services-form {
+
+#tab_1:checked ~ .main-form,
+#tab_2:checked ~ .services-form,
+#tab_3:checked ~ .styles-form {
     display: block;
 }
-.main_tabs > div {
+
+.main_tabs > form {
     display: none;
 }
-.main-form, .services-form {
+
+.main-form,
+.services-form,
+.styles-form {
     margin: 10px;
 }
-.main-form p, .btn_group {
-    margin: 0 0 10px;
+
+.main-form p,
+.btn_group {
+    margin: 10px 0;
 }
+
 .main_tabs > div.wrap_style {
     width: 100%;
     height: 39px;
@@ -39,4 +53,38 @@ body {
     left: 0;
     display: block;
     z-index: -1;
+}
+
+.styles-data {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 8px;
+}
+
+.tray-icon-example {
+    display: grid;
+    grid-template-columns: repeat(4, 24px);
+    grid-template-rows: 24px;
+    justify-items: center;
+    align-items: center;
+    gap: 10px;
+}
+
+.group-selector {
+    background: rgba(157, 188, 226, 0.75);
+    padding: 8px;
+    display: grid;
+    grid-template-columns: 13px 102.5px;
+    align-items: center;
+    gap: 5px;
+    border-radius: 3px;
+}
+
+.label-selector {
+    white-space: nowrap;
+    font: 12px / 12px Roboto;
+}
+
+.style-selector {
+    margin: 0;
 }
